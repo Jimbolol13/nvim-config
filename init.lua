@@ -689,10 +689,6 @@ require('lazy').setup({
 },
 
 
-  
-  
-
-
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -966,3 +962,20 @@ vim.api.nvim_set_keymap(
   ":lua require('telescope.builtin').live_grep({ cwd = vim.g.obsidian_vault })<CR>",
   { noremap = true, silent = true, desc = 'Search text inside all notes' }
 )
+
+
+-- Graceful stop: sends Ctrl-C to the running terminal process
+vim.keymap.set({ 't', 'n' }, '<leader>cc', function()
+  local chan = vim.bo.channel
+  if chan and chan > 0 then
+    vim.fn.chansend(chan, '\003') -- Ctrl-C
+  end
+end, { desc = 'Send Ctrl-C to terminal' })
+
+-- Hard stop: kills the terminal job if Ctrl-C does not work
+vim.keymap.set({ 't', 'n' }, '<leader>ck', function()
+  local chan = vim.bo.channel
+  if chan and chan > 0 then
+    vim.fn.jobstop(chan)
+  end
+end, { desc = 'Kill terminal job' })
