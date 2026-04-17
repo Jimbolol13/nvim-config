@@ -59,34 +59,34 @@ return {
         end,
         desc = '[F]ind [D]ocs topic/file',
       },
-      {
-        '<leader>gD',
-        function()
-          local base = vim.fn.stdpath('config') .. '/docs'
-          local sources = {
-            all = base,
-            tailwind = base .. '/tailwindcss.com',
-            bootstrap = base .. '/bootstrap',
-            php = base .. '/php',
-            symfony = base .. '/symfony-docs',
-          }
-
-          vim.ui.select(vim.tbl_keys(sources), {
-            prompt = 'Search current word in which docs?',
-          }, function(choice)
-            if not choice then
-              return
-            end
-
-            require('telescope.builtin').grep_string({
-              prompt_title = 'Docs for "' .. vim.fn.expand('<cword>') .. '": ' .. choice,
-              cwd = sources[choice],
-              search = vim.fn.expand('<cword>'),
-            })
-          end)
-        end,
-        desc = '[G]rep current word in [D]ocs',
-      },
+--      {
+--         '<leader>gD',
+--         function()
+--           local base = vim.fn.stdpath('config') .. '/docs'
+--           local sources = {
+--             all = base,
+--             tailwind = base .. '/tailwindcss.com',
+--             bootstrap = base .. '/bootstrap',
+--             php = base .. '/php',
+--             symfony = base .. '/symfony-docs',
+--           }
+-- 
+--           vim.ui.select(vim.tbl_keys(sources), {
+--             prompt = 'Search current word in which docs?',
+--           }, function(choice)
+--             if not choice then
+--               return
+--             end
+-- 
+--             require('telescope.builtin').grep_string({
+--               prompt_title = 'Docs for "' .. vim.fn.expand('<cword>') .. '": ' .. choice,
+--               cwd = sources[choice],
+--               search = vim.fn.expand('<cword>'),
+--             })
+--           end)
+--         end,
+--         desc = '[G]rep current word in [D]ocs',
+--       },
     },
   },
 }
