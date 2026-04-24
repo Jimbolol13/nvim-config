@@ -1,10 +1,9 @@
 return {
   "obsidian-nvim/obsidian.nvim",
-  version = "*", -- use latest release, remove to use latest commit
-  ---@module 'obsidian'
-  ---@type obsidian.config
+  version = "*",
   opts = {
-    legacy_commands = false, -- this will be removed in the next major release
+    legacy_commands = false,
+
     workspaces = {
       {
         name = "personal",
@@ -15,5 +14,22 @@ return {
         path = "~/vaults/work",
       },
     },
-  },
+
+    -- ✅ NEW way (no more warning)
+    frontmatter = {
+      func = function(note)
+        return {}
+      end,
+    },
+
+    -- optional: keep filenames clean
+    note_id_func = function(title)
+      return title
+    end,
+
+    -- optional: disable UI clutter
+    footer = {
+      enabled = false,
+      },
+    },
 }

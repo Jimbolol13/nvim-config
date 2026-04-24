@@ -7,8 +7,10 @@ return {
 
       null_ls.setup({
         sources = {
-          null_ls.builtins.formatting.prettier,
-        },
+          null_ls.builtins.formatting.prettier.with({
+            disabled_filetypes = { "markdown" },
+        }),
+      },
 
         -- format on save
         on_attach = function(client, bufnr)
