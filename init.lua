@@ -32,7 +32,7 @@ What is Kickstart?
     make Neovim your own! That might mean leaving Kickstart just the way it is for a while
     or immediately breaking it into modular pieces. It's up to you!
 
-    If you don't know anything about Lua, I recommend taking some time to read through
+    If you don't know anything about Lua, I recommend taking some time to read throughin
     a guide. One possible example which will only take 10-15 minutes:
       - https://learnxinyminutes.com/docs/lua/
 
@@ -481,215 +481,214 @@ require('lazy').setup({
   },
 
   -- LSP Plugins
-  
-{
+
   {
-    'neovim/nvim-lspconfig',
-    lazy = false,
-    dependencies = {
-      { 'williamboman/mason.nvim', opts = {} },
-      { 'williamboman/mason-lspconfig.nvim', opts = {} },
-      { 'WhoIsSethDaniel/mason-tool-installer.nvim', opts = {} },
-      { 'j-hui/fidget.nvim', opts = {} },
-      { 'saghen/blink.cmp' },
-    },
+    {
+      'neovim/nvim-lspconfig',
+      lazy = false,
+      dependencies = {
+        { 'williamboman/mason.nvim', opts = {} },
+        { 'williamboman/mason-lspconfig.nvim', opts = {} },
+        { 'WhoIsSethDaniel/mason-tool-installer.nvim', opts = {} },
+        { 'j-hui/fidget.nvim', opts = {} },
+        { 'saghen/blink.cmp' },
+      },
 
-    config = function()
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      config = function()
+        local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-      require('mason').setup()
+        require('mason').setup()
 
-      require('mason-lspconfig').setup({
-        ensure_installed = {
-          'lua_ls',
-          'html',
-          'cssls',
-          'tailwindcss',
-          'intelephense',
-          'ts_ls',
-          'vue_ls',
-        },
-      })
+        require('mason-lspconfig').setup {
+          ensure_installed = {
+            'lua_ls',
+            'html',
+            'cssls',
+            'tailwindcss',
+            'intelephense',
+            'ts_ls',
+            'vue_ls',
+          },
+          automatic_enable = {
+            exclude = {
+              'emmet_ls',
+              'emmet_language_server',
+              'angularls',
+              'astro',
+              'clangd',
+              'denols',
+              'gopls',
+              'marksman',
+            },
+          },
+        }
 
-      require('mason-tool-installer').setup({
-        ensure_installed = {
-          'lua_ls',
-          'html',
-          'cssls',
-          'tailwindcss',
-          'intelephense',
-          'ts_ls',
-          'vue_ls',
-          'stylua',
-        },
-      })
+        automatic_enable =
+          {
+            exclude = {
+              'emmet_ls',
+              'emmet_language_server',
+              'angularls',
+              'astro',
+              'clangd',
+              'denols',
+              'gopls',
+              'marksman',
+            },
+          }, require('mason-tool-installer').setup {
+            ensure_installed = {
+              'lua_ls',
+              'html',
+              'cssls',
+              'tailwindcss',
+              'intelephense',
+              'ts_ls',
+              'vue_ls',
+              'stylua',
+            },
+          }
 
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
-        callback = function(event)
-          local map = function(keys, func, desc, mode)
-            if type(mode) == 'table' then
-              for _, m in ipairs(mode) do
-                vim.keymap.set(m, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+        vim.api.nvim_create_autocmd('LspAttach', {
+          group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+          callback = function(event)
+            local map = function(keys, func, desc, mode)
+              if type(mode) == 'table' then
+                for _, m in ipairs(mode) do
+                  vim.keymap.set(m, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+                end
+              else
+                vim.keymap.set(mode or 'n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
               end
-            else
-              vim.keymap.set(mode or 'n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
             end
-          end
 
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-          map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-          map('gri', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-          map('grr', vim.lsp.buf.references, '[G]oto [R]eferences')
-          map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-          map('K', vim.lsp.buf.hover, 'Hover Documentation')
-          map('<leader>ws', vim.lsp.buf.workspace_symbol, '[W]orkspace [S]ymbols')
-          map('<leader>ds', vim.lsp.buf.document_symbol, '[D]ocument [S]ymbols')
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
-          map('[d', vim.diagnostic.goto_prev, 'Previous Diagnostic')
-          map(']d', vim.diagnostic.goto_next, 'Next Diagnostic')
-          map('<leader>e', vim.diagnostic.open_float, 'Show Diagnostic')
-          map('<leader>q', vim.diagnostic.setloclist, 'Diagnostic Quickfix List')
+            map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+            map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+            map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+            map('gri', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+            map('grr', vim.lsp.buf.references, '[G]oto [R]eferences')
+            map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+            map('K', vim.lsp.buf.hover, 'Hover Documentation')
+            map('<leader>ws', vim.lsp.buf.workspace_symbol, '[W]orkspace [S]ymbols')
+            map('<leader>ds', vim.lsp.buf.document_symbol, '[D]ocument [S]ymbols')
+            map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+            map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+            map('[d', vim.diagnostic.goto_prev, 'Previous Diagnostic')
+            map(']d', vim.diagnostic.goto_next, 'Next Diagnostic')
+            map('<leader>e', vim.diagnostic.open_float, 'Show Diagnostic')
+            map('<leader>q', vim.diagnostic.setloclist, 'Diagnostic Quickfix List')
 
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
+            local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-          if client and client:supports_method('textDocument/documentHighlight', event.buf) then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+            if client and client:supports_method('textDocument/documentHighlight', event.buf) then
+              local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
 
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.document_highlight,
-            })
+              vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+                buffer = event.buf,
+                group = highlight_augroup,
+                callback = vim.lsp.buf.document_highlight,
+              })
 
-            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.clear_references,
-            })
+              vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+                buffer = event.buf,
+                group = highlight_augroup,
+                callback = vim.lsp.buf.clear_references,
+              })
 
-            vim.api.nvim_create_autocmd('LspDetach', {
-              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-              callback = function(event2)
-                vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds({
-                  group = 'kickstart-lsp-highlight',
-                  buffer = event2.buf,
-                })
-              end,
-            })
-          end
+              vim.api.nvim_create_autocmd('LspDetach', {
+                group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+                callback = function(event2)
+                  vim.lsp.buf.clear_references()
+                  vim.api.nvim_clear_autocmds {
+                    group = 'kickstart-lsp-highlight',
+                    buffer = event2.buf,
+                  }
+                end,
+              })
+            end
 
-          if client and client:supports_method('textDocument/inlayHint', event.buf) then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-            end, '[T]oggle Inlay [H]ints')
-          end
-        end,
-      })
+            if client and client:supports_method('textDocument/inlayHint', event.buf) then
+              map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
+            end
+          end,
+        })
 
-      local vue_language_server_path =
-        vim.fn.stdpath('data') .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+        local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
 
-      vim.lsp.config('html', {
-        capabilities = capabilities,
-      })
+        vim.lsp.config('html', {
+          capabilities = capabilities,
+        })
 
-      vim.lsp.config('cssls', {
-        capabilities = capabilities,
-      })
-
-      vim.lsp.config('tailwindcss', {
-        capabilities = capabilities,
-      })
-
-      vim.lsp.config('intelephense', {
-        capabilities = capabilities,
-      })
-
-      vim.lsp.config('lua_ls', {
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            runtime = { version = 'LuaJIT' },
-            workspace = {
-              checkThirdParty = false,
-              library = vim.api.nvim_get_runtime_file('', true),
-            },
-            telemetry = { enable = false },
+        vim.lsp.config('cssls', {
+          capabilities = capabilities,
+        })
+        vim.lsp.config('tailwindcss', {
+          capabilities = capabilities,
+          filetypes = {
+            'html',
+            'css',
+            'scss',
+            'javascript',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+            'vue',
+            'svelte',
+            'astro',
           },
-        },
-      })
+        })
 
-      vim.lsp.config('ts_ls', {
-        capabilities = capabilities,
-        filetypes = {
-          'typescript',
-          'javascript',
-          'javascriptreact',
-          'typescriptreact',
-          'vue',
-        },
-        init_options = {
-          plugins = {
-            {
-              name = '@vue/typescript-plugin',
-              location = vue_language_server_path,
-              languages = { 'vue' },
+        vim.lsp.config('intelephense', {
+          capabilities = capabilities,
+        })
+
+        vim.lsp.config('lua_ls', {
+          capabilities = capabilities,
+          settings = {
+            Lua = {
+              runtime = { version = 'LuaJIT' },
+              workspace = {
+                checkThirdParty = false,
+                library = vim.api.nvim_get_runtime_file('', true),
+              },
+              telemetry = { enable = false },
             },
           },
-        },
-      })
+        })
 
-      vim.lsp.config('vue_ls', {
-        capabilities = capabilities,
-      })
-
-      vim.lsp.enable('html')
-      vim.lsp.enable('cssls')
-      vim.lsp.enable('tailwindcss')
-      vim.lsp.enable('intelephense')
-      vim.lsp.enable('lua_ls')
-      vim.lsp.enable('ts_ls')
-      vim.lsp.enable('vue_ls')
-
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = 'vue',
-        callback = function(args)
-          local root_dir = vim.fs.root(args.buf, {
-            'package.json',
-            'tsconfig.json',
-            'jsconfig.json',
-            '.git',
-          })
-
-          if not root_dir then
-            return
-          end
-
-          vim.lsp.start({
-            name = 'ts_ls',
-            cmd = { 'typescript-language-server', '--stdio' },
-            root_dir = root_dir,
-            capabilities = capabilities,
-            init_options = {
-              plugins = {
-                {
-                  name = '@vue/typescript-plugin',
-                  location = vue_language_server_path,
-                  languages = { 'vue' },
-                },
+        vim.lsp.config('ts_ls', {
+          capabilities = capabilities,
+          filetypes = {
+            'typescript',
+            'javascript',
+            'javascriptreact',
+            'typescriptreact',
+            'vue',
+          },
+          init_options = {
+            plugins = {
+              {
+                name = '@vue/typescript-plugin',
+                location = vue_language_server_path,
+                languages = { 'vue' },
               },
             },
-          })
-        end,
-      })
-    end,
-  },
-},
+          },
+        })
 
+        vim.lsp.config('vue_ls', {
+          capabilities = capabilities,
+        })
+
+        vim.lsp.enable 'html'
+        vim.lsp.enable 'cssls'
+        vim.lsp.enable 'tailwindcss'
+        vim.lsp.enable 'intelephense'
+        vim.lsp.enable 'lua_ls'
+        vim.lsp.enable 'ts_ls'
+        vim.lsp.enable 'vue_ls'
+      end,
+    },
+  },
 
   { -- Autocompletion
     'saghen/blink.cmp',
@@ -842,48 +841,48 @@ require('lazy').setup({
   },
 
   { -- Highlight, edit, and navigate code
-  
-  ensure_installed = {
-  'lua',
-  'vim',
-  'vimdoc',
-  -- remove "luadoc" if it's there
-  },
-  
-  ignore_install = { 'luadoc' },
-  
-  auto_install = false,
-  
-  'nvim-treesitter/nvim-treesitter',
-  lazy = false,
-  build = ':TSUpdate',
-  branch = 'main',
-  -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
-  config = function()
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-  require('nvim-treesitter').install(parsers)
-  vim.api.nvim_create_autocmd('FileType', {
-  callback = function(args)
-  local buf, filetype = args.buf, args.match
-  
-  local language = vim.treesitter.language.get_lang(filetype)
-  if not language then return end
-  
-  -- check if parser exists and load it
-  if not vim.treesitter.language.add(language) then return end
-  -- enables syntax highlighting and other treesitter features
-  vim.treesitter.start(buf, language)
-  
-  -- enables treesitter based folds
-  -- for more info on folds see `:help folds`
-  -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-  -- vim.wo.foldmethod = 'expr'
-  
-  -- enables treesitter based indentation
-  vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-  end,
-  })
-  end,
+
+    ensure_installed = {
+      'lua',
+      'vim',
+      'vimdoc',
+      -- remove "luadoc" if it's there
+    },
+
+    ignore_install = { 'luadoc' },
+
+    auto_install = false,
+
+    'nvim-treesitter/nvim-treesitter',
+    lazy = false,
+    build = ':TSUpdate',
+    branch = 'main',
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
+    config = function()
+      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      require('nvim-treesitter').install(parsers)
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          local buf, filetype = args.buf, args.match
+
+          local language = vim.treesitter.language.get_lang(filetype)
+          if not language then return end
+
+          -- check if parser exists and load it
+          if not vim.treesitter.language.add(language) then return end
+          -- enables syntax highlighting and other treesitter features
+          vim.treesitter.start(buf, language)
+
+          -- enables treesitter based folds
+          -- for more info on folds see `:help folds`
+          -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+          -- vim.wo.foldmethod = 'expr'
+
+          -- enables treesitter based indentation
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -965,7 +964,6 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true, desc = 'Search text inside all notes' }
 )
 
-
 -- Graceful stop: sends Ctrl-C to the running terminal process
 vim.keymap.set({ 't', 'n' }, '<leader>cc', function()
   local chan = vim.bo.channel
@@ -977,7 +975,5 @@ end, { desc = 'Send Ctrl-C to terminal' })
 -- Hard stop: kills the terminal job if Ctrl-C does not work
 vim.keymap.set({ 't', 'n' }, '<leader>ck', function()
   local chan = vim.bo.channel
-  if chan and chan > 0 then
-    vim.fn.jobstop(chan)
-  end
+  if chan and chan > 0 then vim.fn.jobstop(chan) end
 end, { desc = 'Kill terminal job' })
